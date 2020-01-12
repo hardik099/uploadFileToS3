@@ -1,0 +1,34 @@
+{
+  "TableName": "YourTestTable",
+  "KeySchema": [
+    { "AttributeName": "EMPLOYEE_ID", "KeyType": "HASH" },
+  ],
+  "AttributeDefinitions": [
+    { "AttributeName": "EMPLOYEE_ID", "KeyType": "S" },
+    { "AttributeName": "FIRST_NAME", "KeyType": "S" },
+    { "AttributeName": "MIDDLE_NAME", "KeyType": "S" },
+    { "AttributeName": "LAST_NAME", "KeyType": "S" },
+    { "AttributeName": "GENDER", "KeyType": "S" },
+    { "AttributeName": "DATE_OF_BIRTH", "KeyType": "S" },
+    { "AttributeName": "DATE_OF_JOINING", "KeyType": "S" },
+    { "AttributeName": "WORK_EMAIL", "KeyType": "S" },
+    { "AttributeName": "PERSONAL_EMAIL", "KeyType": "S" },
+    { "AttributeName": "PERSONAL_ADDRESS", "KeyType": "S" },
+    { "AttributeName": "WORK_ADDRESS", "KeyType": "S" },
+    { "AttributeName": "MOBILE_NUMBER", "KeyType": "N" },
+    { "AttributeName": "DEPT", "KeyType": "S" },
+    { "AttributeName": "DESIG", "KeyType": "S" },
+    { "AttributeName": "LATEST_ANNUAL_CTC", "KeyType": "N" },
+    { "AttributeName": "SALARY_VALID_FROM_DATE", "KeyType": "N" },
+    { "AttributeName": "BASIC", "KeyType": "N" },
+    { "AttributeName": "HRA", "KeyType": "N" },
+    { "AttributeName": "BONUS", "KeyType": "N" },
+    { "AttributeName": "SPECIAL_ALLOWANCE", "KeyType": "N" },
+    { "AttributeName": "EMPLOYER_CONTRI_PF", "KeyType": "N" },
+    { "AttributeName": "LTA", "KeyType": "N" }
+  ],
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5
+  }
+}

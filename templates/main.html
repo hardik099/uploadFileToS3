@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FlaskDrive</title>
+  </head>
+  
+  <body>
+    <div class="content">
+        <p>Validating file and uploading it to s3</p>
+    
+        <div>
+          <h3>Upload your file here:</h3>
+          <form method="POST" action="/upload" enctype=multipart/form-data>
+            <input type=file name=file id="txtFileUpload" accept=".csv">
+            <input type=submit value=Upload>
+          </form>
+        </div>
+    </div>
+  </body>
+</html>

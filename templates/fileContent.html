@@ -41,18 +41,17 @@
     <div class="content">
 
     
-        <p>Validating file and uploading it to s3</p>
+        <p>File Contents are here</p>
 
     
         <div>
-          <h3>Upload your file here:</h3>
-          <input type="button" id="see" value="see data" onclick="Upload()" />
-          <form method="POST" action="/upload" enctype=multipart/form-data>
-            <input type=file name=file id="txtFileUpload" accept=".csv">
-            <input type=submit value=Upload>
+            <!--          <input type="button" id="see" value="see data" onclick="Upload()" />-->
+          <form method="POST" action="/saveToDb" enctype=multipart/form-data>
+            <input type=submit value=save>
           </form>
         </div>
         <div id="dvCSV">
+            {{ Content }}
         </div>
 
 
