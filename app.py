@@ -2,13 +2,13 @@ import os
 
 from flask import Flask, render_template, request, redirect, send_file, url_for
 
-from botoS3handler import fileToBbucket, fileFromBucket, allFileInBucket
+from Handlers.botoS3handler import fileToBbucket, fileFromBucket, allFileInBucket
 
-from botoDynamoDbHandler import saveInDynamoDB
+from Handlers.botoDynamoDbHandler import saveInDynamoDB
+
+from Validators.EmployeeFileValidator import validate_row
 
 from werkzeug.utils import secure_filename
-
-import openpyxl
 
 import shutil
 
@@ -32,9 +32,6 @@ def validate_file(file):
             return False;
     else:
         return False;
-
-def validate_row(row_obj):
-    return True;
 
 @app.route('/')
 def entry_point():
