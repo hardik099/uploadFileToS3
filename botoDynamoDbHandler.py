@@ -3,13 +3,13 @@ import boto3
 dynamo_client = boto3.client('dynamodb', region_name='us-west-2', endpoint_url="http://localhost:8000")
 table_name = "employee_table"
 def saveInDynamoDB(employee_data):
-    return dynamo_client.batch_write_item(employee_data);
-    # dynamo=boto3.resource('dynamodb');
-    # t=dynamo.Table(table_name);
-    # for employee in employee_data:
-    #     t.put_item(employee)
-    #
-    # return "success";
+    # return dynamo_client.batch_write_item(employee_data);
+    dynamo=boto3.resource('dynamodb');
+    t=dynamo.Table(table_name);
+    for employee in employee_data:
+        t.put_item(employee)
+
+    return "success";
 
 
 def readAllFromDynamoDB():

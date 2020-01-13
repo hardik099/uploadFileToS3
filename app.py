@@ -6,11 +6,21 @@ from botoS3handler import fileToBbucket, fileFromBucket, allFileInBucket
 
 from botoDynamoDbHandler import saveInDynamoDB
 
+from werkzeug.utils import secure_filename
+
 import openpyxl
+
+import shutil
 
 
 app = Flask(__name__)
+
+uploads_dir = os.path.join(app.instance_path, 'uploads')
+
+app = Flask(__name__)
+
 UPLOAD_FOLDER = "uploads"
+
 BUCKET = "insert_bucket_name_here"
 
 def validate_file(file):
@@ -33,6 +43,9 @@ def entry_point():
 
 @app.route("/file")
 def main():
+    if os.path.isdir(uploads_dir):
+        shutil.rmtree(uploads_dir)
+    os.makedirs(uploads_dir)
     contents = allFileInBucket("flaskdrive")
     return render_template('main.html', contents=contents)
 
@@ -45,13 +58,13 @@ def upload():
         # validate file
         if validate_file(f):
             fileToBbucket(f"{f.filename}", BUCKET);
+            f.save(os.path.join(uploads_dir, secure_filename(f.filename)))
         else:
             # return because validation failed
             return redirect("/validateFailed");
 
         # show contents
-
-        return redirect(url_for('.fileContent', file=f));
+        return redirect(url_for('.fileContent'));
 
 
 @app.route("/validateFailed")
@@ -60,29 +73,34 @@ def validateFailed():
 
 @app.route("/fileContent")
 def fileContent():
+    for root, dirs, files in os.walk(uploads_dir):
+        for filename in files:
+            f = filename
+    WORDS = []
+    data_file = os.path.join(uploads_dir,secure_filename(f))
+    with open(data_file, "r") as file:
+        for line in file.readlines():
+            validate_row(line);
+            WORDS.append(line.rstrip());
+    return render_template('fileContent.html', Content=WORDS)
+
+
+@app.route("/saveToDb", methods=['POST'])
+def saveToDb():
     if request.method == "POST":
-        # f = request.files['file']
-        # f.save(f.filename)
-        # text = open(f, 'r+');
-        # employeedata = text.read();
-        # text.close();
-        saveInDynamoDB(employeedata);
-        return redirect("/saveToDb");
+        for root, dirs, files in os.walk(uploads_dir):
+            for filename in files:
+                f = filename
+        WORDS = []
+        data_file = os.path.join(uploads_dir,secure_filename(f))
+        with open(data_file, "r") as file:
+            for line in file.readlines():
+                WORDS.append(line.rstrip())
+        print("Saving in dynamo db")
+        saveInDynamoDB(WORDS);
+        return render_template('saveToDb.html')
 
-    file_data = [];
-    wb_obj = openpyxl.load_workbook(request.files['file']);
-    sheet_obj = wb_obj.active;
-    row_obj= sheet_obj.row(row = 1);
-    file_data.append(row_obj);
-    for row in sheet_obj.iter_rows(row_offset=1):
-        validate_row(row);
-        file_data.append(row_obj)
-    return render_template('fileContent.html', contents=file_data)
-
-
-@app.route("/saveToDb")
-def saveToDb(contents):
-    return render_template('saveToDb.html', contents=contents)
+    return render_template('saveToDb.html')
 
 
 
