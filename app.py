@@ -1,17 +1,11 @@
 import os
-
 from flask import Flask, render_template, request, redirect, send_file, url_for
-
 from Handlers.botoS3handler import fileToBbucket, fileFromBucket, allFileInBucket
-
-from Handlers.botoDynamoDbHandler import saveInDynamoDB
-
+from Handlers.botoDynamoDbHandler import saveInDB
 from Validators.EmployeeFileValidator import validate_row
-
 from werkzeug.utils import secure_filename
-
 import shutil
-
+from Handlers.SQLAlchemyHandler import create_table
 
 app = Flask(__name__)
 
@@ -24,7 +18,6 @@ UPLOAD_FOLDER = "uploads"
 BUCKET = "insert_bucket_name_here"
 
 def validate_file(file):
-    return True;
     if file.lower().endswith(('.csv', '.xlsx')):
         if os.path.getsize(file) < 20000000:
             return True;
@@ -85,16 +78,17 @@ def fileContent():
 @app.route("/saveToDb", methods=['POST'])
 def saveToDb():
     if request.method == "POST":
-        for root, dirs, files in os.walk(uploads_dir):
-            for filename in files:
-                f = filename
-        WORDS = []
-        data_file = os.path.join(uploads_dir,secure_filename(f))
-        with open(data_file, "r") as file:
-            for line in file.readlines():
-                WORDS.append(line.rstrip())
-        print("Saving in dynamo db")
-        saveInDynamoDB(WORDS);
+        # for root, dirs, files in os.walk(uploads_dir):
+        #     for filename in files:
+        #         f = filename
+        # WORDS = []
+        # data_file = os.path.join(uploads_dir,secure_filename(f))
+        # with open(data_file, "r") as file:
+        #     for line in file.readlines():
+        #         WORDS.append(line.rstrip())
+        # print("Saving in dynamo db")
+        # saveInDB(WORDS);
+        create_table(uploads_dir)
         return render_template('saveToDb.html')
 
     return render_template('saveToDb.html')
